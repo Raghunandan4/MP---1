@@ -38,6 +38,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(passport.setAuthenticatedUser); // check whether session cookie is present or not
+
 // use express router
 app.use('/', require('./routes'));
 
