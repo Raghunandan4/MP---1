@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport'); // for checking user authentication 
 
 const postsController = require('../controllers/posts_controller');
 
-router.post('/create', postsController.create);
+router.post('/create', passport.checkAuthentication, postsController.create); // so that anyone cannot post with html
 
 module.exports = router;
