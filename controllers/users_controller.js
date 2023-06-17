@@ -14,6 +14,17 @@ module.exports.profile = function(req, res) {
     });
 }
 
+module.exports.update = function(req, res) {
+    if (req.user.id == req.params.id) {
+        User.findByIdAndUpdate(req.params.id, req.body, function(err, user) {
+            return res.redirect('back');
+        });
+    } else {
+        return res.status(401).send('Unautorized');
+        // check http status codes in wikipedia 401 - unauthorized, 403 - forbidden, 404 not found, etc
+    }
+}
+
 // render the sign up page
 module.exports.signUp = function(req, res) {
     if (req.isAuthenticated()) {
