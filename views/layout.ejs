@@ -15,13 +15,20 @@
 <body>
     <%- include('_header'); %>
 
-        <main id="layout-main">
-            <%- body %>
-        </main>
+        <% if(flash.success && flash.success.length > 0) { %>
+            <h5>
+                <%= flash.success %>
+            </h5>
 
-        <%- include('_footer'); %>
+            <% } %>
 
-            <%- style %>
+                <main id="layout-main">
+                    <%- body %>
+                </main>
+
+                <%- include('_footer'); %>
+
+                    <%- style %>
 </body>
 
 </html>
