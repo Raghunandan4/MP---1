@@ -14,7 +14,8 @@ module.exports.profile = function(req, res) {
     });
 }
 
-module.exports.update = function(req, res) {
+module.exports.update = async function(req, res) {
+    /*
     if (req.user.id == req.params.id) {
         User.findByIdAndUpdate(req.params.id, req.body, function(err, user) {
             return res.redirect('back');
@@ -22,7 +23,35 @@ module.exports.update = function(req, res) {
     } else {
         return res.status(401).send('Unautorized');
         // check http status codes in wikipedia 401 - unauthorized, 403 - forbidden, 404 not found, etc
+    } */
+
+    if (req.user.id == req.params.id) {
+
+        try {
+            let user = await User.findById(req.params.id);
+            User.uploadedAvatar(req, res, function(err) {
+                if (err) { console.log('~~~Multer Error: ', err) }
+                user.name = req.body.name;
+                user.email = req.body.email;
+
+                if (req.file) {
+                    // this is saving the path of the uploaded file into the avatar field in the user
+                    user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                user.save();
+                return res.redirect('back');
+            });
+
+        } catch {
+            req.flash('error', err);
+            return res.redirect('back');
+        }
+
+    } else {
+        req.flash('error', 'Unauthorized');
+        return res.status(401).send('Unautorized');
     }
+
 }
 
 // render the sign up page
